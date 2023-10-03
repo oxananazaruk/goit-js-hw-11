@@ -2,8 +2,8 @@ import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import SimpleLightbox from "simplelightbox";
 import "simplelightbox/dist/simple-lightbox.min.css";
 
-import { fetchPhotos } from './servises/pixabay-api';
-import {makeMarkupFromRequest} from './servises/makeMarkupFromRequest'
+import { fetchPhotos } from './services/pixabay-api';
+import {makeMarkupFromRequest} from './services/makeMarkupFromRequest'
 
 const galleryEl = document.querySelector('.gallery');
 const formEl = document.querySelector('.search-form');
@@ -19,6 +19,37 @@ let userRequest = "";
 formEl.addEventListener('submit', onFormSubmit);
 loadBtn.addEventListener('click', onLoadBtn);
 
+// async function onFormSubmit(event) {
+//     event.preventDefault();
+//     galleryEl.innerHTML = "";
+//     loadBtn.classList.add("visually-hidden");
+//     endMessage.classList.add("visually-hidden");
+//     userRequest = event.currentTarget.searchQuery.value;
+    
+//     fetchPhotos(userRequest)
+//         .then((data) => {
+//             const result = data.hits;
+//             if (result.length === 0 || userRequest.trim() === "") {
+//                 galleryEl.innerHTML = "";
+//                 Notify.failure("Sorry, there are no images matching your search query. Please try again.");
+//                 return;
+//             }
+//              Notify.success(`Hooray! We found ${data.totalHits} images.`)
+//              const markup = makeMarkupFromRequest(result);
+//              galleryEl.insertAdjacentHTML("beforeend", markup);
+//              lightbox.refresh();
+//             loadBtn.classList.remove("visually-hidden");
+
+//             if (page === Math.ceil(data.totalHits/40)) {
+//             loadBtn.classList.add("visually-hidden");
+//             endMessage.classList.remove("visually-hidden");
+//            }
+//         })
+//         .catch(error => {
+//         console.log(error);
+//     })
+// };
+// -------------------------------------------
 async function onFormSubmit(event) {
     event.preventDefault();
     galleryEl.innerHTML = "";
@@ -26,45 +57,36 @@ async function onFormSubmit(event) {
     endMessage.classList.add("visually-hidden");
     userRequest = event.currentTarget.searchQuery.value;
     
-    fetchPhotos(userRequest)
-        .then((data) => {
-            const result = data.hits;
-            if (result.length === 0 || userRequest.trim() === "") {
-                galleryEl.innerHTML = "";
-                Notify.failure("Sorry, there are no images matching your search query. Please try again.");
-                return;
-            }
+    const data = await fetchPhotos(userRequest);
+    // console.log(data);
+    const result = data.hits;
+
+        if (result.length === 0 || userRequest.trim() === "") {
+             galleryEl.innerHTML = "";
+             Notify.failure("Sorry, there are no images matching your search query. Please try again.");
+             return;
+             };
              Notify.success(`Hooray! We found ${data.totalHits} images.`)
              const markup = makeMarkupFromRequest(result);
              galleryEl.insertAdjacentHTML("beforeend", markup);
              lightbox.refresh();
-            loadBtn.classList.remove("visually-hidden");
-
-            if (page === Math.ceil(data.totalHits/40)) {
-            loadBtn.classList.add("visually-hidden");
-            endMessage.classList.remove("visually-hidden");
-           }
-        })
-        .catch(error => {
-        console.log(error);
-    })
+             loadBtn.classList.remove("visually-hidden");
+    
+             if (page === Math.ceil(data.totalHits / 40)) {
+                 loadBtn.classList.add("visually-hidden");
+                 endMessage.classList.remove("visually-hidden");
+                 };
 };
 
 async function onLoadBtn() {
     page += 1;
-    fetchPhotos(userRequest)
-        .then(data => {
-            const markup = makeMarkupFromRequest(data.hits);
-            galleryEl.insertAdjacentHTML("beforeend", markup);
-            lightbox.refresh();
+    const data = await fetchPhotos(userRequest)
+    const markup = makeMarkupFromRequest(data.hits);
+    galleryEl.insertAdjacentHTML("beforeend", markup);
+    lightbox.refresh();
             
-            if (page === Math.ceil(data.totalHits / 40)) {
-                loadBtn.classList.add("visually-hidden");
-                endMessage.classList.remove("visually-hidden");
+        if (page === Math.ceil(data.totalHits / 40)) {
+            loadBtn.classList.add("visually-hidden");
+            endMessage.classList.remove("visually-hidden");
             } 
-        })
-        .catch(error => {
-            console.log(error);
-        })
 };
-
