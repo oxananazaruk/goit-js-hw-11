@@ -8,20 +8,25 @@
     <script type="module" src="./index.js"></script>
   </head>
   <body>
-    <form class="search-form" id="search-form">
-      <input
-        class="form-input"
-        type="text"
-        name="searchQuery"
-        autocomplete="off"
-        placeholder="Search images..."
-      />
-      <button type="submit">Search</button>
-    </form>
-    <div class="gallery"></div>
-    <button type="button" class="load-more">Load more</button>
-    <p class="end-message">
-      We're sorry, but you've reached the end of search results.
-    </p>
+    <div class="container">
+      <form class="search-form" id="search-form">
+        <input
+          class="form-input"
+          type="text"
+          name="searchQuery"
+          autocomplete="off"
+          placeholder="Search images..."
+        />
+        <button type="submit">Search</button>
+      </form>
+      <div class="gallery"></div>
+      <div class="buttons">
+        <button type="button" class="load-more">Load more</button>
+        <button type="button" class="up-button">Up <span>&#9650;</span></button>
+      </div>
+      <p class="end-message">
+        We're sorry, but you've reached the end of search results.
+      </p>
+    </div>
   </body>
 </html>
