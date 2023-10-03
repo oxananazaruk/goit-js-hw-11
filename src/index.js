@@ -9,11 +9,11 @@ const galleryEl = document.querySelector('.gallery');
 const formEl = document.querySelector('.search-form');
 const loadBtn = document.querySelector('.load-more');
 const endMessage = document.querySelector('.end-message');
-const btnUp = document.querySelector('.up-button');
+const buttonUp = document.querySelector('.up-button');
 
 loadBtn.classList.add("visually-hidden");
 endMessage.classList.add("visually-hidden");
-btnUp.classList.add("visually-hidden");
+buttonUp.classList.add("visually-hidden");
 const lightbox = new SimpleLightbox('.gallery a');
 export let page = 1;
 let userRequest = "";
@@ -57,7 +57,7 @@ async function onFormSubmit(event) {
     galleryEl.innerHTML = "";
     loadBtn.classList.add("visually-hidden");
     endMessage.classList.add("visually-hidden");
-    btnUp.classList.add("visually-hidden");
+    buttonUp.classList.add("visually-hidden");
     userRequest = event.currentTarget.searchQuery.value;
     
     const data = await fetchPhotos(userRequest);
@@ -75,7 +75,7 @@ async function onFormSubmit(event) {
     galleryEl.insertAdjacentHTML("beforeend", markup);
     lightbox.refresh();
     loadBtn.classList.remove("visually-hidden");
-    btnUp.classList.remove("visually-hidden");
+    buttonUp.classList.remove("visually-hidden");
     
     
     if (page === Math.ceil(data.totalHits / 40)) {
@@ -107,6 +107,6 @@ async function onLoadBtn() {
     };
 };
 
-btnUp.addEventListener('click', () => {
+buttonUp.addEventListener('click', () => {
    window.scrollTo(0, 0);
 });
