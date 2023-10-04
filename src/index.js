@@ -21,37 +21,6 @@ let userRequest = "";
 formEl.addEventListener('submit', onFormSubmit);
 loadBtn.addEventListener('click', onLoadBtn);
 
-// async function onFormSubmit(event) {
-//     event.preventDefault();
-//     galleryEl.innerHTML = "";
-//     loadBtn.classList.add("visually-hidden");
-//     endMessage.classList.add("visually-hidden");
-//     userRequest = event.currentTarget.searchQuery.value;
-    
-//     fetchPhotos(userRequest)
-//         .then((data) => {
-//             const result = data.hits;
-//             if (result.length === 0 || userRequest.trim() === "") {
-//                 galleryEl.innerHTML = "";
-//                 Notify.failure("Sorry, there are no images matching your search query. Please try again.");
-//                 return;
-//             }
-//              Notify.success(`Hooray! We found ${data.totalHits} images.`)
-//              const markup = makeMarkupFromRequest(result);
-//              galleryEl.insertAdjacentHTML("beforeend", markup);
-//              lightbox.refresh();
-//             loadBtn.classList.remove("visually-hidden");
-
-//             if (page === Math.ceil(data.totalHits/40)) {
-//             loadBtn.classList.add("visually-hidden");
-//             endMessage.classList.remove("visually-hidden");
-//            }
-//         })
-//         .catch(error => {
-//         console.log(error);
-//     })
-// };
-// -------------------------------------------
 async function onFormSubmit(event) {
     event.preventDefault();
     galleryEl.innerHTML = "";
@@ -59,9 +28,9 @@ async function onFormSubmit(event) {
     endMessage.classList.add("visually-hidden");
     buttonUp.classList.add("visually-hidden");
     userRequest = event.currentTarget.searchQuery.value;
+    page = 1;
     
     const data = await fetchPhotos(userRequest);
-    // console.log(data);
     const result = data.hits;
 
     if (result.length === 0 || userRequest.trim() === "") {
@@ -81,8 +50,7 @@ async function onFormSubmit(event) {
     if (page === Math.ceil(data.totalHits / 40)) {
         loadBtn.classList.add("visually-hidden");
         endMessage.classList.remove("visually-hidden");
-    };
-    
+    };   
 };
 
 async function onLoadBtn() {
